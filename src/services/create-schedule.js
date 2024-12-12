@@ -35,17 +35,9 @@ function getScheduleObject(req) {
 }
 
 async function createSchedule(req, res) {
-  try {
-    const scheduleDoc = getScheduleObject(req);
-    const schedule = await ScheduleModel.create(scheduleDoc);
-    return res.status(201).json({ success: true, schedule });
-  } catch (err) {
-    logger.error(`Error occurred while creating schedule ${scheduleDoc.name}`, err);
-    return res.status(400).json({
-      success: false,
-      message: err.message || 'Failed to create schedule.',
-    });
-  }
+  const scheduleDoc = getScheduleObject(req);
+  const schedule = await ScheduleModel.create(scheduleDoc);
+  return res.status(201).json({ success: true, schedule });
 }
 
 module.exports = createSchedule;

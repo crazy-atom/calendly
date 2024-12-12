@@ -158,19 +158,15 @@ async function getFinalSlots(schedule, startTime, endTime, req) {
 async function getSlots(req, res) {
   const { scheduleId } = req.params;
 
-  try {
-    const schedule = await fetchSchedule(scheduleId);
-    if (!schedule) {
-      return res.status(404).json({ success: false, error: 'Schedule not found' });
-    }
-    const startTime = createTzDate(req.body.startDate, req.body.timeZone);
-    const endTime = fns.addDays(startTime, 1);
-
-    const slots = await getFinalSlots(schedule, startTime, endTime, req);
-    return res.status(200).json({ success: true, data: slots });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: 'An error occurred while fetching slots' });
+  const schedule = await fetchSchedule(scheduleId);
+  if (!schedule) {
+    return res.status(404).json({ success: false, error: 'Schedule not found' });
   }
+  const startTime = createTzDate(req.body.startDate, req.body.timeZone);
+  const endTime = fns.addDays(startTime, 1);
+
+  const slots = await getFinalSlots(schedule, startTime, endTime, req);
+  return res.status(200).json({ success: true, data: slots });
 }
 
 module.exports = getSlots;

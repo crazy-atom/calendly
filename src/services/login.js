@@ -13,21 +13,17 @@ function generateToken(userId) {
 
 async function login(req, res) {
   const { username, password } = req.body;
-  try {
-    const user = await UserModel.findOne({ username }).exec();
-    if (!user) {
-      return res.status(404).json({ message: 'Please register User not found' });
-    }
-
-    if (!(await bcrypt.compare(password, user.passwordHash))) {
-      return res.status(401).json({ message: 'Invalid Credentials' });
-    }
-    const token = generateToken(user.id);
-    logger.info(`user ${username} successfully logged in: ${token}`);
-    return res.json({ token });
-  } catch (err) {
-    return res.status(500).json({ message: 'Internal Server Error', err });
+  const user = await UserModel.findOne({ username }).exec();
+  if (!user) {
+    return res.status(404).json({ message: 'Please register User not found' });
   }
+
+  if (!(await bcrypt.compare(password, user.passwordHash))) {
+    return res.status(401).json({ message: 'Invalid Credentials' });
+  }
+  const token = generateToken(user.id);
+  logger.info(`user ${username} successfully logged in: ${token}`);
+  return res.json({ token });
 }
 
 module.exports = login;
