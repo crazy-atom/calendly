@@ -66,8 +66,13 @@ Users can delete an existing meeting by providing the meeting ID. This ensures b
 
 ## How to run
 - Clone the repository
-- Run mongodb on port 27017
+  ```git clone https://github.com/crazy-atom/calendly.git```
+- Ensure that mongodb is running
 - Install dependencies `npm install`
+- Use env template from `.env.example` to create local `.env` file.
 - Run the app `npm start`
-- API documentation and example are provided here `https://documenter.getpostman.com/view/4132297/2sAYHwKjps`
+- API documentation and example are provided here https://documenter.getpostman.com/view/4132297/2sAYHwKjps
+
+## API Sandbox
+- Sandbox is running at https://p0-calendly-icd7.onrender.com
 ---
