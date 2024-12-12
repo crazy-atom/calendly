@@ -10,12 +10,6 @@ const {
   toDate,
 } = require('../utils/common');
 
-function getStartAndEndTime(req, schedule) {
-  const startTime = new Date(req.body.startTime);
-  const endTime = fns.addMilliseconds(startTime, schedule.duration);
-  return { startTime, endTime };
-}
-
 function isTimeRangeValid(schedule, startTime, endTime) {
   return isOverlap(schedule.startTime, schedule.endTime, startTime, endTime);
 }
@@ -80,7 +74,9 @@ async function createMeeting(req, res) {
     return res.status(404).json({ success: false, error: 'Schedule not found, cannot fix the meeting' });
   }
 
-  const { startTime, endTime } = getStartAndEndTime(req, schedule);
+  const startTime = new Date(req.body.startTime);
+  const endTime = fns.addMilliseconds(startTime, schedule.duration);
+
   const isValid = await isSlotValid(startTime, endTime, schedule);
   if (!isValid) {
     return res.status(400).json({ success: false, error: 'TimeSlot not available' });

@@ -11,12 +11,6 @@ const {
 
 const MeetingModel = require('../models/meetingModel');
 
-function getStartAndEndTime(req) {
-  const startTime = createTzDate(req.body.startDate, req.body.timeZone);
-  const endTime = fns.addDays(startTime, 1);
-  return { startTime, endTime };
-}
-
 function fillRuleSlots(schedule, rule, startTime, endTime) {
   const slots = [];
   let slotStart = fns.max([rule.startTime, startTime]);
@@ -169,7 +163,9 @@ async function getSlots(req, res) {
     if (!schedule) {
       return res.status(404).json({ success: false, error: 'Schedule not found' });
     }
-    const { startTime, endTime } = getStartAndEndTime(req);
+    const startTime = createTzDate(req.body.startDate, req.body.timeZone);
+    const endTime = fns.addDays(startTime, 1);
+
     const slots = await getFinalSlots(schedule, startTime, endTime, req);
     return res.status(200).json({ success: true, data: slots });
   } catch (error) {

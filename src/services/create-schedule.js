@@ -1,4 +1,5 @@
 const ScheduleModel = require('../models/scheduleModel');
+const logger = require('../utils/logger');
 
 function getScheduleObject(req) {
   const {
@@ -36,12 +37,10 @@ function getScheduleObject(req) {
 async function createSchedule(req, res) {
   try {
     const scheduleDoc = getScheduleObject(req);
-
     const schedule = await ScheduleModel.create(scheduleDoc);
-
-    // Respond with the created schedule
     return res.status(201).json({ success: true, schedule });
   } catch (err) {
+    logger.error(`Error occurred while creating schedule ${scheduleDoc.name}`, err);
     return res.status(400).json({
       success: false,
       message: err.message || 'Failed to create schedule.',

@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
-const UserModel = require('../models/userModel');
+const conf = require('../conf');
 const logger = require('../utils/logger');
+const UserModel = require('../models/userModel');
 
-async function generateAndUpdateToken(userId) {
-  const sid = crypto.randomBytes(24).toString('base64');
-  const sidHash = await bcrypt.hash(sid, 8);
-  await UserModel.findByIdAndUpdate(userId, { sidHash });
-  return `${userId}-${sid}`;
+function generateToken(userId) {
+  return jwt.sign({ userId }, conf.jwtSecret, {
+    expiresIn: conf.jwtSecretExpiresIn,
+  });
 }
 
 async function login(req, res) {
@@ -22,7 +22,7 @@ async function login(req, res) {
     if (!(await bcrypt.compare(password, user.passwordHash))) {
       return res.status(401).json({ message: 'Invalid Credentials' });
     }
-    const token = await generateAndUpdateToken(user.id);
+    const token = generateToken(user.id);
     logger.info(`user ${username} successfully logged in: ${token}`);
     return res.json({ token });
   } catch (err) {

@@ -13,10 +13,6 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 10,
   },
-  sidHash: {
-    type: String,
-    minlength: 10,
-  },
 }, {
   timestamps: true,
 });

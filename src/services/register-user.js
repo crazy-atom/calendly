@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+
 const UserModel = require('../models/userModel');
 const logger = require('../utils/logger');
 
